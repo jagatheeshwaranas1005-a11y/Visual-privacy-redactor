@@ -6,9 +6,11 @@ import os
 import zipfile
 from datetime import datetime, timezone
 
-# Fix SSL cert verification on Windows
-os.environ.setdefault("SSL_CERT_FILE", os.path.join(os.path.dirname(__file__), ".venv", "Lib", "site-packages", "certifi", "cacert.pem"))
-os.environ.setdefault("REQUESTS_CA_BUNDLE", os.environ["SSL_CERT_FILE"])
+import certifi
+
+# Fix SSL cert verification cross-platform
+os.environ["SSL_CERT_FILE"] = certifi.where()
+os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
 
 import streamlit as st
 from PIL import Image
