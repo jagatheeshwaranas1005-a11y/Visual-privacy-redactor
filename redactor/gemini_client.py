@@ -14,11 +14,11 @@ Analyze the image and find privacy-sensitive objects. Look specifically for:
 FACE, LICENSE_PLATE, QR_CODE, TV_MONITOR.
 
 Return ONLY valid JSON (no markdown fences, no commentary) with this exact shape:
-{"detections": [{"type": "FACE", "confidence": 0.98, "bbox": [x1, y1, x2, y2]}]}
+{"detections": [{"type": "FACE", "confidence": 0.98, "bbox": [ymin, xmin, ymax, xmax]}]}
 
 Rules:
-- bbox is [left, top, right, bottom] in PIXEL coordinates (integers).
-  x1=left, y1=top, x2=right, y2=bottom relative to the image you see.
+- bbox MUST be [ymin, xmin, ymax, xmax] using normalized 0-1000 scale integers. 
+  For example, [250, 100, 300, 150] means ymin=250, xmin=100, ymax=300, xmax=150.
 - confidence is a number 0.0 to 1.0.
 - Do NOT extract, transcribe, or read any text. Detection only.
 - If nothing sensitive is present, return {"detections": []}.
@@ -59,21 +59,22 @@ def _parse_response(text: str) -> list[dict]:
 
 
 def _scale_bbox(detection: dict, width: int, height: int) -> dict:
-    """Ensure bbox is in pixel space.
+    """Convert normalized [ymin, xmin, ymax, xmax] (0-1000 scale) to [x1, y1, x2, y2] pixel space."""
+    ymin, xmin, ymax, xmax = detection["bbox"]
+    
+    # Scale from 0-1000 back to 0-1 for easier conversion
+    if max(ymin, xmin, ymax, xmax) > 1.0:
+        ymin, xmin, ymax, xmax = ymin / 1000.0, xmin / 1000.0, ymax / 1000.0, xmax / 1000.0
+        
+    x1, y1 = xmin * width, ymin * height
+    x2, y2 = xmax * width, ymax * height
 
-    We ask Gemini for pixel coordinates, but defensively handle normalized
-    (0..1) if it ignores the prompt. Also clamp to image bounds.
-    """
-    x1, y1, x2, y2 = detection["bbox"]
-    if max(x1, y1, x2, y2) <= 1.0:
-        # Fallback: treat as normalized and scale
-        detection["bbox"] = [x1 * width, y1 * height, x2 * width, y2 * height]
     # Clamp to image bounds
     detection["bbox"] = [
-        max(0, min(width, detection["bbox"][0])),
-        max(0, min(height, detection["bbox"][1])),
-        max(0, min(width, detection["bbox"][2])),
-        max(0, min(height, detection["bbox"][3])),
+        max(0, min(width, x1)),
+        max(0, min(height, y1)),
+        max(0, min(width, x2)),
+        max(0, min(height, y2)),
     ]
     return detection
 
