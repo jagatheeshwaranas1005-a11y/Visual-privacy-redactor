@@ -40,62 +40,62 @@ h1 {
     font-weight: 800 !important;
     letter-spacing: -0.025em;
     margin-bottom: 0.5rem !important;
-    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #0F172A !important;
 }
-/* Primary button gradient */
+/* Primary button */
 [data-testid="baseButton-primary"] {
-    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
-    border: none !important;
+    background-color: #0F172A !important;
+    border: 1px solid #0F172A !important;
     color: white !important;
     font-weight: 600 !important;
     border-radius: 8px !important;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 [data-testid="baseButton-primary"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    background-color: #1E293B !important;
+    border-color: #1E293B !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 /* Secondary buttons */
 [data-testid="baseButton-secondary"] {
     border-radius: 8px !important;
     font-weight: 500 !important;
-    border: 1px solid #334155 !important;
-    background-color: transparent !important;
+    border: 1px solid #E2E8F0 !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
     transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 [data-testid="baseButton-secondary"]:hover {
-    background-color: #1E293B !important;
-    border-color: #4F46E5 !important;
-    color: #F8FAFC !important;
+    background-color: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
 }
 /* Metrics */
 [data-testid="stMetricValue"] {
     font-weight: 700 !important;
-    color: #4F46E5 !important;
+    color: #0F172A !important;
     font-size: 2.5rem !important;
 }
 /* Uploader */
 [data-testid="stFileUploadDropzone"] {
-    border: 2px dashed #334155 !important;
+    border: 2px dashed #CBD5E1 !important;
     border-radius: 12px !important;
-    background-color: #0B0F19 !important;
+    background-color: #F8FAFC !important;
     padding: 2rem !important;
     transition: all 0.2s ease;
 }
 [data-testid="stFileUploadDropzone"]:hover {
-    border-color: #4F46E5 !important;
-    background-color: #1E293B !important;
+    border-color: #94A3B8 !important;
+    background-color: #F1F5F9 !important;
 }
 /* Sidebar */
 [data-testid="stSidebar"] {
-    background-color: #0B0F19 !important;
-    border-right: 1px solid #1E293B !important;
+    border-right: 1px solid #E2E8F0 !important;
 }
 hr {
-    border-color: #1E293B !important;
+    border-color: #E2E8F0 !important;
 }
 </style>
 """
@@ -142,7 +142,7 @@ def main() -> None:
 
     st.markdown("<h1>The AI Privacy Redactor</h1>", unsafe_allow_html=True)
     st.markdown(
-        "<p style='font-size: 1.25rem; color: #94A3B8; margin-bottom: 2rem; max-width: 800px;'>"
+        "<p style='font-size: 1.25rem; color: #64748B; margin-bottom: 2rem; max-width: 800px;'>"
         "Detect and automatically redact sensitive information at scale. "
         "Powered by Gemini vision models for high-accuracy face, plate, and screen detection."
         "</p>",
