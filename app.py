@@ -27,6 +27,79 @@ from redactor.mock import mock_detections
 from redactor.policy import apply_policy
 from redactor.redaction import redact_image
 
+PREMIUM_CSS = """
+<style>
+/* Base container */
+.block-container {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+/* Title & typography */
+h1 {
+    font-size: 3.5rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem !important;
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+/* Primary button gradient */
+[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+[data-testid="baseButton-primary"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+/* Secondary buttons */
+[data-testid="baseButton-secondary"] {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    border: 1px solid #334155 !important;
+    background-color: transparent !important;
+    transition: all 0.2s ease;
+}
+[data-testid="baseButton-secondary"]:hover {
+    background-color: #1E293B !important;
+    border-color: #4F46E5 !important;
+    color: #F8FAFC !important;
+}
+/* Metrics */
+[data-testid="stMetricValue"] {
+    font-weight: 700 !important;
+    color: #4F46E5 !important;
+    font-size: 2.5rem !important;
+}
+/* Uploader */
+[data-testid="stFileUploadDropzone"] {
+    border: 2px dashed #334155 !important;
+    border-radius: 12px !important;
+    background-color: #0B0F19 !important;
+    padding: 2rem !important;
+    transition: all 0.2s ease;
+}
+[data-testid="stFileUploadDropzone"]:hover {
+    border-color: #4F46E5 !important;
+    background-color: #1E293B !important;
+}
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #0B0F19 !important;
+    border-right: 1px solid #1E293B !important;
+}
+hr {
+    border-color: #1E293B !important;
+}
+</style>
+"""
+
 st.set_page_config(page_title="Visual Privacy Redactor", page_icon="🕶️", layout="wide")
 
 MODES = ("Redact", "Detect", "QC")
@@ -64,12 +137,16 @@ def _run_detection(source: Image.Image, base_config: AppConfig, enabled: set[str
 
 
 def main() -> None:
+    st.markdown(PREMIUM_CSS, unsafe_allow_html=True)
     base_config = load_config()
 
-    st.title("Visual Privacy Redactor")
-    st.caption(
-        "Upload images → sensitive objects are detected and automatically "
-        "blurred / pixelated / blacked out."
+    st.markdown("<h1>The AI Privacy Redactor</h1>", unsafe_allow_html=True)
+    st.markdown(
+        "<p style='font-size: 1.25rem; color: #94A3B8; margin-bottom: 2rem; max-width: 800px;'>"
+        "Detect and automatically redact sensitive information at scale. "
+        "Powered by Gemini vision models for high-accuracy face, plate, and screen detection."
+        "</p>",
+        unsafe_allow_html=True
     )
 
     if base_config.use_mock:
